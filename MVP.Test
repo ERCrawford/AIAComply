@@ -1,0 +1,31 @@
+class ComplianceRuleEngine:
+    def __init__(self):
+        self.rules = []
+        self.rule_types = {
+            'keyword': self.evaluate_keyword_rule,
+            'regex': self.evaluate_regex_rule,
+            'sentiment': self.evaluate_sentiment_rule
+        }
+    
+    def create_rule(self, rule_type, parameters):
+        """
+        Dynamically create and validate compliance rules
+        - Supports multiple rule types
+        - Implements basic validation
+        - Allows flexible configuration
+        """
+        if rule_type not in self.rule_types:
+            raise ValueError(f"Unsupported rule type: {rule_type}")
+        
+        # Validate and sanitize rule parameters
+        validated_rule = self.validate_rule_parameters(rule_type, parameters)
+        
+        # Create and store rule
+        new_rule = {
+            'type': rule_type,
+            'parameters': validated_rule,
+            'created_at': datetime.now(),
+            'id': str(uuid.uuid4())
+        }
+        self.rules.append(new_rule)
+        return new_rule['id']
